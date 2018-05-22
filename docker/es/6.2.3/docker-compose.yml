@@ -1,0 +1,9 @@
+wise-es: 
+  image: wise-es:6.2.3
+  ports: 
+  - 9200:9200
+  - 9300:9300
+  volumes: 
+  - /data/es/data:/usr/share/elasticsearch/data
+  - /data/es/logs:/usr/share/elasticsearch/logs
+  restart: always
