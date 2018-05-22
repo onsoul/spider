@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -227,7 +228,7 @@ public class CommonsSpiderPanel extends BaseController {
     @RequestMapping(value = "showRelatedInfo", method = {RequestMethod.GET})
     public ModelAndView showRelatedInfo(String query, @RequestParam(required = false, defaultValue = "10") int size) {
         ModelAndView modelAndView = new ModelAndView("panel/commons/showRelatedInfo");
-        Pair<Map<String, List<Terms.Bucket>>, List<Webpage>> result = commonWebpageService.relatedInfo(query, size).getResult();
+        Pair<Map<String, List<? extends Bucket>>, List<Webpage>> result = commonWebpageService.relatedInfo(query, size).getResult();
         String title = "";
         String[] queryArray = query.split(":");
         String field = queryArray[0];

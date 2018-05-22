@@ -12,9 +12,9 @@
       },
       "siteName": {
         "type": "text",
-        "analyzer": "index_ansj",
-        "search_analyzer": "query_ansj",
-        "include_in_all": true,
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_max_word",
+        "copy_to": true,
         "fields": {
           "raw": {
             "type": "keyword"

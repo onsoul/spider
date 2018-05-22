@@ -22,7 +22,7 @@
     "charset": "",
     "publishTimeXPath": "//div[@class='left-t']/text()",
     "publishTimeReg": "",
-    "publishTimeFormat": " yyyy年MM月dd日 HH:mm　来源：",
+    "publishTimeFormat": "",
     "lang": "",
     "country": "",
     "callbackURL": [],

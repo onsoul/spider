@@ -1,11 +1,16 @@
 package com.gs.spider.dao;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.gson.*;
-import com.gs.spider.model.async.Task;
-import com.gs.spider.model.commons.Webpage;
+import static org.elasticsearch.index.query.QueryBuilders.moreLikeThisQuery;
+
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -22,11 +27,17 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.BucketOrder;
+import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation.Bucket;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -35,12 +46,16 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.OutputStream;
-import java.text.DateFormat;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-
-import static org.elasticsearch.index.query.QueryBuilders.moreLikeThisQuery;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
+import com.gs.spider.model.async.Task;
+import com.gs.spider.model.commons.Webpage;
 
 /**
  * CommonWebpageDAO
@@ -338,7 +353,7 @@ public class CommonWebpageDAO extends IDAO<Webpage> {
      * @param size  结果集数量
      * @return 相关信息
      */
-    public Pair<Map<String, List<Terms.Bucket>>, List<Webpage>> relatedInfo(String query, int size) {
+    public Pair<Map<String, List<? extends Bucket>>, List<Webpage>> relatedInfo(String query, int size) {
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(INDEX_NAME)
                 .setTypes(TYPE_NAME)
                 .setQuery(QueryBuilders.queryStringQuery(query))
@@ -349,7 +364,7 @@ public class CommonWebpageDAO extends IDAO<Webpage> {
                 .addAggregation(AggregationBuilders.terms("relatedKeywords").field("keywords"))
                 .setSize(size);
         SearchResponse response = searchRequestBuilder.execute().actionGet();
-        Map<String, List<Terms.Bucket>> info = Maps.newHashMap();
+        Map<String, List<? extends Bucket>> info = Maps.newHashMap();
         info.put("relatedPeople", ((Terms) response.getAggregations().get("relatedPeople")).getBuckets());
         info.put("relatedLocation", ((Terms) response.getAggregations().get("relatedLocation")).getBuckets());
         info.put("relatedInstitution", ((Terms) response.getAggregations().get("relatedInstitution")).getBuckets());
@@ -358,7 +373,7 @@ public class CommonWebpageDAO extends IDAO<Webpage> {
     }
 
     /**
-     * 批量更新网页
+     * 批量更新网页lllll
      *
      * @param webpageList 网页列表
      * @return
@@ -400,10 +415,10 @@ public class CommonWebpageDAO extends IDAO<Webpage> {
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(INDEX_NAME)
                 .setTypes(TYPE_NAME)
                 .setQuery(QueryBuilders.matchAllQuery())
-                .addAggregation(AggregationBuilders.terms("domain").field("domain").size(size).order(Terms.Order.count(false)));
+                .addAggregation(AggregationBuilders.terms("domain").field("domain").size(size).order(BucketOrder.count(false)));
         SearchResponse response = searchRequestBuilder.execute().actionGet();
         Terms termsAgg = response.getAggregations().get("domain");
-        List<Terms.Bucket> list = termsAgg.getBuckets();
+        List<? extends Bucket> list = termsAgg.getBuckets();
         Map<String, Long> count = Maps.newLinkedHashMap();
         list.stream().filter(bucket -> ((String) bucket.getKey()).length() > 1).forEach(bucket -> {
             count.put((String) bucket.getKey(), bucket.getDocCount());
@@ -424,7 +439,7 @@ public class CommonWebpageDAO extends IDAO<Webpage> {
                 .addAggregation(AggregationBuilders.terms("content").field("content").size(200));
         SearchResponse response = searchRequestBuilder.execute().actionGet();
         Terms termsAgg = response.getAggregations().get("content");
-        List<Terms.Bucket> list = termsAgg.getBuckets();
+        List<? extends Bucket> list = termsAgg.getBuckets();
         Map<String, Long> count = new HashMap<>();
         list.stream().filter(bucket -> ((String) bucket.getKey()).length() > 1).forEach(bucket -> {
             count.put((String) bucket.getKey(), bucket.getDocCount());
@@ -466,7 +481,7 @@ public class CommonWebpageDAO extends IDAO<Webpage> {
                 AggregationBuilders
                         .dateHistogram("agg")
                         .field("gatherTime")
-                        .dateHistogramInterval(DateHistogramInterval.DAY).order(Histogram.Order.KEY_DESC);
+                        .dateHistogramInterval(DateHistogramInterval.DAY).order(BucketOrder.key(false));
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(INDEX_NAME)
                 .setTypes(TYPE_NAME)
                 .setQuery(QueryBuilders.matchQuery("domain", domain))

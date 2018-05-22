@@ -3,12 +3,12 @@
     "dynamic_templates": [
       {
         "strings": {
-          "match_mapping_type": "string",
+          "match_mapping_type": "text",
           "mapping": {
             "type": "text",
             "analyzer": "ik_max_word",
             "search_analyzer": "ik_max_word",
-            "copy_to": true,
+            "include_in_all": true,
             "fields": {
               "raw": {
                 "type": "keyword"
@@ -23,14 +23,14 @@
         "type": "text",
         "analyzer": "ik_max_word",
         "search_analyzer": "ik_max_word",
-        "copy_to": true,
+        "include_in_all": true,
         "store": true
       },
       "title": {
         "type": "text",
         "analyzer": "ik_max_word",
         "search_analyzer": "ik_max_word",
-        "copy_to": true,
+        "include_in_all": true,
         "store": true
       },
       "dateStr": {
@@ -43,7 +43,7 @@
         "type": "text",
         "analyzer": "ik_max_word",
         "search_analyzer": "ik_max_word",
-        "copy_to": true,
+        "include_in_all": true,
         "fields": {
           "raw": {
             "type": "keyword"
@@ -72,7 +72,7 @@
         "type": "text",
         "analyzer": "ik_max_word",
         "search_analyzer": "ik_max_word",
-        "copy_to": true,
+        "include_in_all": true,
         "store": true
       },
       "namedEntity": {
@@ -95,7 +95,7 @@
         "type": "text",
         "analyzer": "ik_max_word",
         "search_analyzer": "ik_max_word",
-        "copy_to": true,
+        "include_in_all": true,
         "fields": {
           "raw": {
             "type": "keyword"
@@ -104,7 +104,7 @@
       },
       "rawHTML": {
         "type": "binary",
-        "copy_to": false
+        "include_in_all": false
       },
       "dynamic_fields": {
         "dynamic": true,
