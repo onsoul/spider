@@ -1,6 +1,6 @@
 package com.gs.spider.service.commons.spiderinfo;
 
-import com.gs.spider.dao.SpiderInfoDAO;
+import com.gs.spider.dao.core.SpiderInfoDAO;
 import com.gs.spider.model.commons.SpiderInfo;
 import com.gs.spider.model.utils.ResultBundle;
 import com.gs.spider.model.utils.ResultBundleBuilder;

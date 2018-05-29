@@ -1,4 +1,4 @@
-package com.gs.spider.dao;
+package com.gs.spider.dao.pipeline;
 
 import com.google.gson.Gson;
 import com.gs.spider.model.commons.Webpage;
@@ -23,7 +23,7 @@ public class JsonFilePipeline implements Pipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-        Webpage webpage = CommonWebpagePipeline.convertResultItems2Webpage(resultItems);
+        Webpage webpage = WebpagePipeline.convertResultItems2Webpage(resultItems);
         try {
             FileUtils.writeStringToFile(
                     new File("gather_platform_data/" + webpage.getSpiderUUID() + ".json"),

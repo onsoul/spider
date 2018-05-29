@@ -1,19 +1,24 @@
 package com.gs.spider.gather.commons;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.gs.spider.dao.CommonWebpageDAO;
-import com.gs.spider.dao.CommonWebpagePipeline;
-import com.gs.spider.dao.SpiderInfoDAO;
-import com.gs.spider.gather.async.AsyncGather;
-import com.gs.spider.gather.async.TaskManager;
-import com.gs.spider.model.async.State;
-import com.gs.spider.model.async.Task;
-import com.gs.spider.model.commons.SpiderInfo;
-import com.gs.spider.model.commons.Webpage;
-import com.gs.spider.utils.NLPExtractor;
-import com.gs.spider.utils.StaticValue;
+import java.io.File;
+import java.io.IOException;
+import java.net.BindException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.management.JMException;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -28,6 +33,22 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.gs.spider.dao.core.CommonWebpageDAO;
+import com.gs.spider.dao.core.SpiderInfoDAO;
+import com.gs.spider.dao.pipeline.WebpagePipeline;
+import com.gs.spider.gather.async.AsyncGather;
+import com.gs.spider.gather.async.TaskManager;
+import com.gs.spider.model.async.State;
+import com.gs.spider.model.async.Task;
+import com.gs.spider.model.commons.SpiderInfo;
+import com.gs.spider.model.commons.Webpage;
+import com.gs.spider.utils.NLPExtractor;
+import com.gs.spider.utils.StaticValue;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -40,15 +61,6 @@ import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
-
-import javax.management.JMException;
-import java.io.File;
-import java.io.IOException;
-import java.net.BindException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * CommonSpider
@@ -108,10 +120,14 @@ public class CommonSpider extends AsyncGather {
     //慎用爬虫监控,可能导致内存泄露
     private SpiderMonitor spiderMonitor = SpiderMonitor.instance();
     private Map<String, MySpider> spiderMap = new HashMap<>();
+    
     private NLPExtractor keywordsExtractor;
     private NLPExtractor summaryExtractor;
     private NLPExtractor namedEntitiesExtractor;
+    
+    @Autowired
     private StaticValue staticValue;
+    
     @SuppressWarnings("unchecked")
     private final PageConsumer spiderInfoPageConsumer = (page, info, task) -> {
         try {
@@ -349,9 +365,11 @@ public class CommonSpider extends AsyncGather {
             task.setDescription("处理网页出错，%s", e.toString());
         }
     };
+    
+    
     private CasperjsDownloader casperjsDownloader;
     private List<Pipeline> pipelineList;
-    private CommonWebpagePipeline commonWebpagePipeline;
+    private WebpagePipeline webpagePipeline;
     private ContentLengthLimitHttpClientDownloader contentLengthLimitHttpClientDownloader;
     private CommonWebpageDAO commonWebpageDAO;
     private SpiderInfoDAO spiderInfoDAO;
@@ -454,7 +472,7 @@ public class CommonSpider extends AsyncGather {
             }
         };
         if (staticValue.isNeedEs()) {
-            scheduler.setDuplicateRemover(commonWebpagePipeline);
+            scheduler.setDuplicateRemover(webpagePipeline);
         }
         MySpider spider = (MySpider) makeSpider(info, task)
                 .setScheduler(scheduler);
@@ -498,7 +516,7 @@ public class CommonSpider extends AsyncGather {
         taskManager.getTaskById(uuid).setState(State.RUNNING);
         spider.run();
         List<Webpage> webpageList = Lists.newLinkedList();
-        resultItemsCollectorPipeline.getCollected().forEach(resultItems -> webpageList.add(CommonWebpagePipeline.convertResultItems2Webpage(resultItems)));
+        resultItemsCollectorPipeline.getCollected().forEach(resultItems -> webpageList.add(WebpagePipeline.convertResultItems2Webpage(resultItems)));
         return webpageList;
     }
 
@@ -620,7 +638,7 @@ public class CommonSpider extends AsyncGather {
                             //应用新模板抽取数据
                             spiderInfoPageConsumer.accept(page, spiderInfo, task);
                             //更新网页数据
-                            newWebpageList.add(CommonWebpagePipeline.convertResultItems2Webpage(page.getResultItems()));
+                            newWebpageList.add(WebpagePipeline.convertResultItems2Webpage(page.getResultItems()));
                         } catch (Exception e) {
                             LOG.error("应用模板时发生异常,webpageID:{},error:{}", webpage.getId(), e.getLocalizedMessage());
                         } finally {
@@ -670,12 +688,12 @@ public class CommonSpider extends AsyncGather {
         this.keywordsExtractor = keywordsExtractor;
     }
 
-    public CommonWebpagePipeline getCommonWebpagePipeline() {
-        return commonWebpagePipeline;
+    public WebpagePipeline getWebpagePipeline() {
+        return webpagePipeline;
     }
 
-    public CommonSpider setCommonWebpagePipeline(CommonWebpagePipeline commonWebpagePipeline) {
-        this.commonWebpagePipeline = commonWebpagePipeline;
+    public CommonSpider setWebpagePipeline(WebpagePipeline webpagePipeline) {
+        this.webpagePipeline = webpagePipeline;
         return this;
     }
 
@@ -786,7 +804,7 @@ public class CommonSpider extends AsyncGather {
             Task task = taskManager.getTaskById(this.getUUID());
             if (task != null) {
                 //清除抓取列表缓存
-                commonWebpagePipeline.deleteUrls(task.getTaskId());
+                webpagePipeline.deleteUrls(task.getTaskId());
                 taskManager.stopTask(task);
             }
         }

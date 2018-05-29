@@ -1,4 +1,4 @@
-package com.gs.spider.dao;
+package com.gs.spider.dao.pipeline;
 
 import com.google.gson.Gson;
 import com.gs.spider.utils.StaticValue;

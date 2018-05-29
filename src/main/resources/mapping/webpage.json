@@ -1,0 +1,120 @@
+{
+	"webpage": {
+		"dynamic_templates": [
+			{
+				"strings": {
+					"match_mapping_type": "string",
+					"mapping": {
+						"type": "text",
+						"analyzer": "ik_max_word",
+						"search_analyzer": "ik_max_word",
+						"copy_to": true,
+						"fields": {
+							"raw": {
+								"type": "text"
+							}
+						}
+					}
+				}
+			}
+		],
+		"properties": {
+			"content": {
+				"type": "text",
+				"analyzer": "ik_max_word",
+				"search_analyzer": "ik_max_word",
+				"copy_to": true,
+				"store": true
+			},
+			"title": {
+				"type": "text",
+				"analyzer": "ik_max_word",
+				"search_analyzer": "ik_max_word",
+				"copy_to": true,
+				"store": true
+			},
+			"dateStr": {
+				"type": "keyword"
+			},
+			"url": {
+				"type": "text"
+			},
+			"source": {
+				"type": "text",
+				"analyzer": "ik_max_word",
+				"search_analyzer": "ik_max_word",
+				"copy_to": true,
+				"fields": {
+					"raw": {
+						"type": "keyword"
+					}
+				}
+			},
+			"id": {
+				"type": "keyword"
+			},
+			"spiderInfo": {
+				"type": "keyword"
+			},
+			"gatherTime": {
+				"type": "date"
+			},
+			"domain": {
+				"type": "keyword"
+			},
+			"spiderUUID": {
+				"type": "keyword"
+			},
+			"keywords": {
+				"type": "keyword"
+			},
+			"summary": {
+				"type": "text",
+				"analyzer": "ik_max_word",
+				"search_analyzer": "ik_max_word",
+				"copy_to": true,
+				"store": true
+			},
+			"namedEntity": {
+				"properties": {
+					"nr": {
+						"type": "keyword"
+					},
+					"ns": {
+						"type": "keyword"
+					},
+					"nt": {
+						"type": "keyword"
+					}
+				}
+			},
+			"publishTime": {
+				"type": "date"
+			},
+			"category": {
+				"type": "text",
+				"analyzer": "ik_max_word",
+				"search_analyzer": "ik_max_word",
+				"copy_to": true,
+				"fields": {
+					"raw": {
+						"type": "keyword"
+					}
+				}
+			},
+			"rawHTML": {
+				"type": "binary",
+				"copy_to": false
+			},
+			"dynamic_fields": {
+				"dynamic": true,
+				"properties": {
+					
+				}
+			},
+			"processTime": {
+				"type": "long"
+			}
+		}
+	}
+}

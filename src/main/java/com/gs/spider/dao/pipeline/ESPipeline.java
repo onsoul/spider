@@ -1,19 +1,24 @@
-package com.gs.spider.dao;
+package com.gs.spider.dao.pipeline;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import us.codecraft.webmagic.ResultItems;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.pipeline.Pipeline;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gs.spider.dao.IDAO;
+
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.pipeline.Pipeline;
 
 /**
  * NewsPipeline
@@ -24,9 +29,11 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 public abstract class ESPipeline extends IDAO implements Pipeline {
     private final String INDEX_NAME, TYPE_NAME;
     private Logger LOG = LogManager.getLogger(ESPipeline.class);
-
-    public ESPipeline(ESClient esClient, String indexName, String typeName) {
-        super(esClient, indexName, typeName);
+    
+    @Autowired
+    private Client client;
+    
+    public ESPipeline(String indexName, String typeName) {
         this.INDEX_NAME = indexName;
         this.TYPE_NAME = typeName;
     }

@@ -1,13 +1,14 @@
 package com.gs.spider.gather.async.quartz;
 
-import com.gs.spider.model.commons.SpiderInfo;
-import com.gs.spider.service.commons.spider.CommonsSpiderService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+
+import com.gs.spider.model.commons.SpiderInfo;
+import com.gs.spider.service.commons.spider.CommonsSpiderService;
 
 /**
  * Created by gaoshen on 2017/1/18.

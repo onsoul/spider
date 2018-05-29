@@ -1,7 +1,7 @@
 package com.gs.spider.service.commons.webpage;
 
 import com.google.gson.Gson;
-import com.gs.spider.dao.CommonWebpageDAO;
+import com.gs.spider.dao.core.CommonWebpageDAO;
 import com.gs.spider.gather.commons.CommonSpider;
 import com.gs.spider.model.commons.SpiderInfo;
 import com.gs.spider.model.commons.Webpage;

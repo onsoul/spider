@@ -1,0 +1,14 @@
+version: '2'
+services:
+    gather-es: 
+      image: registry.cn-shenzhen.aliyuncs.com/gather/elasticsearch:6.2.3 
+      ports: 
+        - 9200:9200 
+        - 9300:9300
+         
+    gather-spider: 
+      image: registry.cn-shenzhen.aliyuncs.com/gather/spider:1.1.0
+      links: 
+        - gather-es
+      ports: 
+        - 82:82

@@ -1,9 +1,0 @@
-soa-es: 
-  image: tomcat:8.5
-  environment: 
-  ports: 
-  - 8080:8080
-  
-  volumes: 
-  - /opt/spider:/usr/local/tomcat/webapps/spider
-  restart: always

@@ -1,0 +1,8 @@
+spring.application.name: wise-spider
+server.port: 82
+
+spring.mvc.view.suffix: .jsp
+spring.mvc.view.prefix: /pages/
+
+spring.thymeleaf.cache: false
+spring.thymeleaf.enabled: false

@@ -17,7 +17,8 @@
         "copy_to": true,
         "fields": {
           "raw": {
-            "type": "keyword"
+            "type": "keyword",
+            "index": true
           }
         }
       },
