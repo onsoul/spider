@@ -34,7 +34,7 @@
 		</repository>
 	</repositories>
 
-	<pluginRepositories>
+<!-- 	<pluginRepositories>
 		<pluginRepository>
 			<id>alfresco-public</id>
 			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
@@ -51,7 +51,7 @@
 			<id>beardedgeeks-releases</id>
 			<url>http://beardedgeeks.googlecode.com/svn/repository/releases</url>
 		</pluginRepository>
-	</pluginRepositories>
+	</pluginRepositories> -->
 
 	<dependencies>
 
