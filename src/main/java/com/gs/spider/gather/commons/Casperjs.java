@@ -1,18 +1,19 @@
 package com.gs.spider.gather.commons;
 
-import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
-import com.gs.spider.model.commons.Request;
-import com.gs.spider.utils.HttpClientUtil;
-import com.gs.spider.utils.StaticValue;
+import java.io.IOException;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.Map;
+import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import com.gs.spider.model.commons.Request;
+import com.gs.spider.model.utils.StaticValue;
+import com.gs.spider.utils.HttpClientUtil;
 
 /**
  * Casperjs
@@ -26,8 +27,10 @@ public class Casperjs {
     private static Gson gson = new Gson();
     @Autowired
     private HttpClientUtil httpUtils;
+
     @Autowired
     private StaticValue staticValue;
+    
 
     /**
      * 抓取html

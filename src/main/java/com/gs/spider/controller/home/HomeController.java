@@ -21,9 +21,9 @@ public class HomeController extends BaseController {
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public ModelAndView home() {
     	ModelAndView modelAndView = new ModelAndView("panel/welcome/welcome");
-    	modelAndView.addObject("appName", AppInfo.APP_NAME)
-    		.addObject("appVersion", AppInfo.APP_VERSION)
-    		.addObject("onlineDocumentation",AppInfo.ONLINE_DOCUMENTATION);
+    	modelAndView.addObject("appName", "在线采集平台")
+    		.addObject("appVersion", "0。6")
+    		.addObject("onlineDocumentation","https://gsh199449.github.io/gather_platform_pages/");
         return modelAndView;
     }
 

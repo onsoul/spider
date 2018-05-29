@@ -1,5 +1,25 @@
-spring.application.name: wise-spider
+spring.application.name: gather-platform
 server.port: 82
+
+
+logging.level.root: INFO
+##下个版本修正为使用spring.data.*默认配置项
+es.need: true
+##不用ES是没什么意义的，所以我认为这个参数是多余的
+
+es.host: ${ES_HOST:192.168.1.200}
+es.port: ${ES_PORT:9100}
+es.cluster.name: docker-cluster
+
+redis.need: true
+redis.host: ${REDIS_HOST:localhost}
+redis.port: ${REDIS_PORT:10000}
+redis.webpage.channel.name: webpage
+
+
+
+max.http.downloader.length: 1048576
+ajax.downloader: http://localhost:7788/
 
 spring.mvc.view.suffix: .jsp
 spring.mvc.view.prefix: /pages/

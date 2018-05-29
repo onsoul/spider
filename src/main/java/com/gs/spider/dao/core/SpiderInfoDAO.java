@@ -36,6 +36,7 @@ import com.gs.spider.model.commons.SpiderInfo;
  */
 @Component
 public class SpiderInfoDAO extends IDAO<SpiderInfo> {
+	
 	private final static String INDEX_SPIDERINFO = "spiderinfo", TYPE_NAME = "spiderinfo";
 
 	@Autowired

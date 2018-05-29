@@ -13,9 +13,9 @@
 	<groupId>com.gs</groupId>
 	<artifactId>spider</artifactId>
 	<packaging>jar</packaging>
-
 	<version>1.1-SNAPSHOT</version>
 	<name>spider</name>
+	<url>https://gsh199449.github.io/gather_platform_pages/</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
