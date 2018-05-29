@@ -8,3 +8,11 @@
 ###自主构建 
 
 > docker build -t {image.name}:{image.verion} .
+
+> 例: docker build -t gs-es:6.2.3 .
+
+> docker run -p 9200:9200 -p 9300:9300 gs-es:6.2.3
+
+> docker ps
+
+> curl localhost:9200/_cat

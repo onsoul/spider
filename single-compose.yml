@@ -1,0 +1,11 @@
+gather-spider: 
+   image: registry.cn-shenzhen.aliyuncs.com/gather/spider:1.1.0
+   ports: 
+     - 82:82
+   restart: always
+   environment:
+    - ES_HOST=192.168.1.200
+    - ES_PORT=9100
+    - REDIS_HOST=192.168.1.200
+    - REDIS_PORT=6379
+    - CLUSTER_NAME=docker-cluster

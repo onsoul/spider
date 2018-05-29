@@ -7,7 +7,7 @@ gs.es.need: true
 ##不用ES是没什么意义的，所以我认为这个参数是多余的
 gs.es.host: ${ES_HOST:192.168.1.200}
 gs.es.port: ${ES_PORT:9100}
-gs.es.cluster.name: docker-cluster
+gs.es.cluster.name: ${CLUSTER_NAME:docker-cluster}
 gs.redis.need: true
 gs.redis.host: ${REDIS_HOST:localhost}
 gs.redis.port: ${REDIS_PORT:10000}
