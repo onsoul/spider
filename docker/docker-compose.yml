@@ -1,0 +1,29 @@
+version: '2'
+services:
+    redis: 
+      image: redis:3.2
+      command: redis-server --appendonly yes
+      ports: 
+        - 6379:6379 
+      volumes: 
+        - /data/redis/data:/data
+      restart: always
+      
+    es: 
+      image: registry.cn-shenzhen.aliyuncs.com/gather/elasticsearch:6.2.3 
+      ports: 
+        - 9200:9200 
+        - 9300:9300
+      volumes: 
+        - /data/es/data:/usr/share/elasticsearch/data
+        - /data/es/logs:/usr/share/elasticsearch/logs
+      restart: always  
+            
+    gather-spider: 
+      image: registry.cn-shenzhen.aliyuncs.com/gather/spider:1.1.0
+      links: 
+        - es
+        - redis
+      ports: 
+        - 82:82
+      restart: always

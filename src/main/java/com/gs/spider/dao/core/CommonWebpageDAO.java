@@ -49,8 +49,8 @@ import org.springframework.stereotype.Component;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.gs.spider.core.es.ESUtil;
 import com.gs.spider.dao.IDAO;
-import com.gs.spider.es.ESUtil;
 import com.gs.spider.model.async.Task;
 import com.gs.spider.model.commons.Webpage;
 

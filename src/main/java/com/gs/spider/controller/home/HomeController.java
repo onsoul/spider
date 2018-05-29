@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gs.spider.controller.BaseController;
-import com.gs.spider.utils.AppInfo;
 
 /**
  * Created by gsh199449 on 2016/11/24.
@@ -22,7 +21,7 @@ public class HomeController extends BaseController {
     public ModelAndView home() {
     	ModelAndView modelAndView = new ModelAndView("panel/welcome/welcome");
     	modelAndView.addObject("appName", "在线采集平台")
-    		.addObject("appVersion", "0。6")
+    		.addObject("appVersion", "0.7")
     		.addObject("onlineDocumentation","https://gsh199449.github.io/gather_platform_pages/");
         return modelAndView;
     }

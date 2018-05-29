@@ -6,29 +6,73 @@ import org.springframework.stereotype.Component;
 @Component
 public class StaticValue {
 
-	@Value("${es.host}")
+	@Value("${gs.es.host}")
 	private String esHost = "localhost";
 
-	@Value("${es.port}")
+	@Value("${gs.es.port}")
 	private int esPort = 9300;
 
-	@Value("${es.cluster.name}")
+	@Value("${gs.es.cluster.name}")
 	private String esClusterName = "docker-cluster";
 
-	@Value("${es.need}")
+	@Value("${gs.es.need}")
 	private boolean isNeedEs = false;
 
-	@Value("${ajax.downloader}")
+	@Value("${gs.ajax.downloader}")
 	private String ajaxDownloader = "http://localhost:7788/";
 
-	@Value("${max.http.downloader.length}")
+	@Value("${gs.max.http.downloader.length}")
 	private long maxHttpDownloadLength = 1048576;
+
+	@Value("${gs.redis.need}")
+	private boolean needRedis = true;
+
+	@Value("${gs.redis.host}")
+	private String redisHost = "localhost";
+
+	@Value("${gs.redis.port}")
+	private int redisPort = 6379;
+
+	@Value("${gs.redis.webpage.channel.name}")
+	private String publishChannelName = "webpage";
 
 	private int taskDeleteDelay = 1;
 	private int taskDeletePeriod = 2;
 	private long limitOfCommonWebpageDownloadQueue = 100000;
 
 	private int commonsWebpageCrawlRatio = 2;
+
+	public boolean isNeedRedis() {
+		return needRedis;
+	}
+
+	public void setNeedRedis(boolean needRedis) {
+		this.needRedis = needRedis;
+	}
+
+	public String getRedisHost() {
+		return redisHost;
+	}
+
+	public void setRedisHost(String redisHost) {
+		this.redisHost = redisHost;
+	}
+
+	public int getRedisPort() {
+		return redisPort;
+	}
+
+	public void setRedisPort(int redisPort) {
+		this.redisPort = redisPort;
+	}
+
+	public String getPublishChannelName() {
+		return publishChannelName;
+	}
+
+	public void setPublishChannelName(String publishChannelName) {
+		this.publishChannelName = publishChannelName;
+	}
 
 	public String getEsHost() {
 		return esHost;

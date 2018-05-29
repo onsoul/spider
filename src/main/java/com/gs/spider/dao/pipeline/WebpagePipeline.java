@@ -24,8 +24,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
+import com.gs.spider.core.es.ESUtil;
 import com.gs.spider.dao.IDAO;
-import com.gs.spider.es.ESUtil;
 import com.gs.spider.model.commons.SpiderInfo;
 import com.gs.spider.model.commons.Webpage;
 

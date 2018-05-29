@@ -1,4 +1,4 @@
-package com.gs.spider.es;
+package com.gs.spider.core.es;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -20,16 +20,16 @@ public class ESConfig {
 
 	private Logger LOG = LogManager.getLogger(ESConfig.class);
 
-	@Value("${es.host}")
+	@Value("${gs.es.host}")
 	private String esHost = "localhost";
 
-	@Value("${es.port}")
+	@Value("${gs.es.port}")
 	private int esPort = 9300;
 
-	@Value("${es.cluster.name}")
+	@Value("${gs.es.cluster.name}")
 	private String esClusterName = "docker-cluster";
 
-	@Value("${es.need}")
+	@Value("${gs.es.need}")
 	private boolean isNeedEs = false;
 
 	@Bean

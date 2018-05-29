@@ -1,4 +1,4 @@
-package com.gs.spider.es;
+package com.gs.spider.core.es;
 
 import java.io.File;
 import java.io.IOException;
