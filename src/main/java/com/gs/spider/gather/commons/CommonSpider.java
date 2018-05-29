@@ -1,6 +1,5 @@
 package com.gs.spider.gather.commons;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.BindException;
 import java.text.ParseException;
@@ -17,9 +16,11 @@ import java.util.TimerTask;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.management.JMException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -33,7 +34,10 @@ import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -73,6 +77,7 @@ import us.codecraft.webmagic.utils.UrlUtils;
 @Component
 public class CommonSpider extends AsyncGather {
 	private static final Logger log = LoggerFactory.getLogger(CommonSpider.class);
+
 	private static final String LINK_KEY = "LINK_LIST";
 	private static final String DYNAMIC_FIELD = "dynamic_fields";
 	private static final String SPIDER_INFO = "spiderInfo";
@@ -80,14 +85,20 @@ public class CommonSpider extends AsyncGather {
 	// 尽量先匹配长模板
 	private static LinkedList<Pair<String, SimpleDateFormat>> datePattern = Lists.newLinkedList();
 
-	static {
+	@Value(value = "classpath:/ignoredUrls.txt")
+	private Resource ignoredUrlsSource;
+
+	@Value(value = "classpath:/datePattern.txt")
+	private Resource datePatternSource;
+
+	@PostConstruct
+	private void init() {
 		try {
-			ignoredUrls = FileUtils
-					.readLines(new File(CommonSpider.class.getClassLoader().getResource("ignoredUrls.txt").getFile()));
+			ignoredUrls = IOUtils.readLines(ignoredUrlsSource.getInputStream(), "utf8");
 			log.info("加载普通网页爬虫url忽略名单成功,忽略名单:{}", ignoredUrls);
+
 			try {
-				String[] datePatternFile = FileUtils.readFileToString(
-						new File(CommonSpider.class.getClassLoader().getResource("datePattern.txt").getFile()), "utf8")
+				String[] datePatternFile = IOUtils.toString(datePatternSource.getInputStream(), "utf8")
 						.replace("\r", "").split("=====\r?\n");
 				String[] dateList = datePatternFile[0].split("\n");
 				String[] timeList = datePatternFile[1].split("\n");
@@ -119,6 +130,7 @@ public class CommonSpider extends AsyncGather {
 			e.printStackTrace();
 			log.error("加载普通网页爬虫url忽略名单失败", e);
 		}
+
 	}
 
 	// 慎用爬虫监控,可能导致内存泄露
