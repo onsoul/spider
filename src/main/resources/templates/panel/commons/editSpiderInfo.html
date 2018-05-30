@@ -1,18 +1,10 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: gaoshen
-  Date: 16/6/30
-  Time: 上午10:11
-  To change this template use File | Settings | File Templates.
---%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>爬虫模板测试系统</title>
-    <%@include file="../../commons/header.jsp" %>
-    <%@include file="../../commons/allScript.jsp" %>
+    <th:block th:include="commons/header" />
+    <th:block th:include="commons/allScript" />
+     
     <script>
         function jsonStringify(data, space) {
             var seen = [];
@@ -178,7 +170,7 @@
                         keyboard: false,
                         backdrop: "static"
                     });
-                    $.getJSON('${pageContext.request.contextPath}/commons/spider/testSpiderInfo', {spiderInfoJson: JSON.stringify(result)}, function (data) {
+                    $.getJSON('/commons/spider/testSpiderInfo', {spiderInfoJson: JSON.stringify(result)}, function (data) {
                         $("#webpageTableBody").html("");
                         var modalBody = $("#confirmModalBody");
                         var modalTitle = $("#confirmModalTitle");
@@ -192,7 +184,7 @@
                         var webpageTable = $("#webpageTable");
                         webpageTable.show("slow");
                         $('#taskId').html(data.resultList[0].spiderUUID);
-                        $('#openTaskDetail').attr('href', '${pageContext.request.contextPath}/commons/spider/getTaskById?taskId=' + data.resultList[0].spiderUUID);
+                        $('#openTaskDetail').attr('href', '/commons/spider/getTaskById?taskId=' + data.resultList[0].spiderUUID);
                         $('#taskIdDiv').show();
                         var engContentCount = 0, threshold = 0.8;
                         var tempContent = "";
@@ -300,21 +292,21 @@
             return validate;
         }, "url列表必须有至少一个url,必须为json格式,且每个链接必须使用http或者https开头");
         function submitTask() {
-            rpcAndShowData("${pageContext.request.contextPath}/commons/spider/start", {spiderInfoJson: JSON.stringify(formToJson("spiderInfoForm"))});
+            rpcAndShowData("/commons/spider/start", {spiderInfoJson: JSON.stringify(formToJson("spiderInfoForm"))});
         }
         function save() {
-            rpcAndShowData("${pageContext.request.contextPath}/commons/spiderinfo/save", {spiderInfoJson: JSON.stringify(formToJson("spiderInfoForm"))});
+            rpcAndShowData("/commons/spiderinfo/save", {spiderInfoJson: JSON.stringify(formToJson("spiderInfoForm"))});
         }
         function onDomainBlur() {
             var domain = $('#domain').val();
             $('#startURL').val('[\'http://' + domain + '/\']');
-            $.getJSON('${pageContext.request.contextPath}/commons/spiderinfo/getByDomain', {domain: domain}, function (data) {
+            $.getJSON('/commons/spiderinfo/getByDomain', {domain: domain}, function (data) {
                 if (data.count > 0) {
                     showModal("请确认", "服务器中已包含此网站的模板,确定要继续配置吗?",
                             function () {//cancel
                                 var result = formToJson("spiderInfoForm");
                                 localStorage["spiderInfo"] = jsonStringify(result, 0);
-                                window.location.href = "${pageContext.request.contextPath}/panel/commons/listSpiderInfo?domain=" + domain;
+                                window.location.href = "/panel/commons/listSpiderInfo?domain=" + domain;
                             },
                             function () {//confirm
                                 $('#confirmModal').modal('hide');
@@ -329,20 +321,21 @@
     </script>
 </head>
 <body>
-<%@include file="../../commons/head.jsp" %>
+
+<th:block th:include="commons/head" />
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <form id="spiderInfoForm" action="${pageContext.request.contextPath}/commons/spider/testSpiderInfo">
+            <form id="spiderInfoForm" action="/commons/spider/testSpiderInfo">
                 <div class="form-group">
                     <label for="siteName" >siteName</label>
                     <input type="text" class="form-control" id="siteName" name="siteName" placeholder="网站名称"
-                           value="${spiderInfo.siteName}">
+                           th:value="${spiderInfo.siteName}">
                 </div>
                 <div class="form-group">
                     <label for="domain">domain</label>
                     <input type="text" class="form-control" id="domain" name="domain" placeholder="域名"
-                           value="${spiderInfo.domain}"
+                           th:value="${spiderInfo.domain}"
                            onblur="onDomainBlur()">
                 </div>
                 <div class="form-group">
@@ -353,88 +346,88 @@
                     <div class="form-group">
                         <label for="id">id</label>
                         <input type="text" class="form-control" id="id" name="id" placeholder="模板ID,系统自动填充,请勿手工赋值"
-                               value="${spiderInfo.id}">
+                               th:value="${spiderInfo.id}">
                     </div>
                     <div class="form-group">
                         <label for="thread">thread</label>
                         <input type="number" class="form-control" id="thread" name="thread" placeholder="抓取线程数"
-                               value="${spiderInfo.thread}">
+                               th:value="${spiderInfo.thread}">
                     </div>
                     <div class="form-group">
                         <label for="retry">retry</label>
                         <input type="number" class="form-control" id="retry" name="retry" placeholder="失败的网页重试次数"
-                               value="${spiderInfo.retry}">
+                               th:value="${spiderInfo.retry}">
                     </div>
                     <div class="form-group">
                         <label for="sleep">sleep</label>
                         <input type="number" class="form-control" id="sleep" name="sleep" placeholder="抓取每个网页睡眠时间"
-                               value="${spiderInfo.sleep}">
+                               th:value="${spiderInfo.sleep}">
                     </div>
                     <div class="form-group">
                         <label for="maxPageGather">maxPageGather(请在导出模板前将最大抓取数量设置为生产环境中正确的值)</label>
                         <input type="number" class="form-control" id="maxPageGather" name="maxPageGather"
-                               placeholder="最大抓取网页数量,0代表不限制" value="${spiderInfo.maxPageGather}">
+                               placeholder="最大抓取网页数量,0代表不限制" th:value="${spiderInfo.maxPageGather}">
                     </div>
                     <div class="form-group">
                         <label for="timeout">timeout</label>
                         <input type="number" class="form-control" id="timeout" name="timeout" placeholder="HTTP链接超时时间"
-                               value="${spiderInfo.timeout}">
+                               th:value="${spiderInfo.timeout}">
                     </div>
                     <div class="form-group">
                         <label for="contentReg">contentReg</label>
                         <input type="text" class="form-control" id="contentReg" name="contentReg" placeholder="正文正则表达式"
-                               value="${spiderInfo.contentReg}">
+                               th:value="${spiderInfo.contentReg}">
                     </div>
                     <div class="form-group">
                         <label for="contentXPath">contentXPath</label>
                         <input type="text" class="form-control" id="contentXPath" name="contentXPath"
                                placeholder="正文Xpath"
-                               value="${spiderInfo.contentXPath}">
+                               th:value="${spiderInfo.contentXPath}">
                     </div>
                     <div class="form-group">
                         <label for="titleReg">titleReg</label>
                         <input type="text" class="form-control" id="titleReg" name="titleReg" placeholder="标题正则"
-                               value="${spiderInfo.titleReg}">
+                               th:value="${spiderInfo.titleReg}">
                     </div>
                     <div class="form-group">
                         <label for="titleXPath">titleXPath</label>
                         <input type="text" class="form-control" id="titleXPath" name="titleXPath" placeholder="标题xpath"
-                               value="${spiderInfo.titleXPath}">
+                               th:value="${spiderInfo.titleXPath}">
                     </div>
                     <div class="form-group">
                         <label for="categoryReg">categoryReg</label>
                         <input type="text" class="form-control" id="categoryReg" name="categoryReg" placeholder="分类信息正则"
-                               value="${spiderInfo.categoryReg}">
+                               th:value="${spiderInfo.categoryReg}">
                     </div>
                     <div class="form-group">
                         <label for="categoryXPath">categoryXPath</label>
                         <input type="text" class="form-control" id="categoryXPath" name="categoryXPath"
-                               placeholder="分类信息XPath" value="${spiderInfo.categoryXPath}">
+                               placeholder="分类信息XPath" th:value="${spiderInfo.categoryXPath}">
                     </div>
                     <div class="form-group">
                         <label for="defaultCategory">defaultCategory</label>
                         <input type="text" class="form-control" id="defaultCategory" name="defaultCategory"
-                               placeholder="默认分类" value="${spiderInfo.defaultCategory}">
+                               placeholder="默认分类" th:value="${spiderInfo.defaultCategory}">
                     </div>
                     <div class="form-group">
                         <label for="urlReg">urlReg</label>
                         <input type="text" class="form-control" id="urlReg" name="urlReg" placeholder="url正则"
-                               value="${spiderInfo.urlReg}">
+                               th:value="${spiderInfo.urlReg}">
                     </div>
                     <div class="form-group">
                         <label for="charset">charset</label>
                         <input type="text" class="form-control" id="charset" name="charset" placeholder="编码"
-                               value="${spiderInfo.charset}">
+                               th:value="${spiderInfo.charset}">
                     </div>
                     <div class="form-group">
                         <label for="publishTimeXPath">publishTimeXPath</label>
                         <input type="text" class="form-control" id="publishTimeXPath" name="publishTimeXPath"
-                               placeholder="发布时间xpath" value="${spiderInfo.publishTimeXPath}">
+                               placeholder="发布时间xpath" th:value="${spiderInfo.publishTimeXPath}">
                     </div>
                     <div class="form-group">
                         <label for="publishTimeReg">publishTimeReg</label>
                         <input type="text" class="form-control" id="publishTimeReg" name="publishTimeReg"
-                               placeholder="发布时间正则" value="${spiderInfo.publishTimeReg}">
+                               placeholder="发布时间正则" th:value="${spiderInfo.publishTimeReg}">
                     </div>
                     <div class="form-group">
                         <label for="publishTimeFormat">publishTimeFormat</label>
@@ -499,46 +492,46 @@
                     <div class="form-group">
                         <label for="lang">lang</label>
                         <input type="text" class="form-control" id="lang" name="lang"
-                               placeholder="发布时间模板语言" value="${spiderInfo.lang}">
+                               placeholder="发布时间模板语言" th:value="${spiderInfo.lang}">
                     </div>
                     <div class="form-group">
                         <label for="country">country</label>
                         <input type="text" class="form-control" id="country" name="country"
-                               placeholder="发布时间模板国家" value="${spiderInfo.country}">
+                               placeholder="发布时间模板国家" th:value="${spiderInfo.country}">
                     </div>
                     <div class="form-group">
                         <label for="callbackURL">callbackURL(多个回调地址请使用json格式书写,例如['http://news.qq.com','http://news.qq.com/dfs/dfs.fg'])</label>
                         <input type="text" class="form-control" id="callbackURL" name="callbackURL" placeholder="回调url"
-                               value="${spiderInfo.callbackURL}">
+                               th:value="${spiderInfo.callbackURL}">
                     </div>
                     <div class="form-group">
                         <label for="userAgent">userAgent</label>
                         <input type="text" class="form-control" id="userAgent" name="userAgent" placeholder="userAgent"
-                               value="${spiderInfo.userAgent}">
+                               th:value="${spiderInfo.userAgent}">
                     </div>
                     <div class="form-group">
                         <label for="proxyHost">proxyHost</label>
                         <input type="text" class="form-control" id="proxyHost" name="proxyHost"
                                placeholder="proxyHost"
-                               value="${spiderInfo.proxyHost}">
+                               th:value="${spiderInfo.proxyHost}">
                     </div>
                     <div class="form-group">
                         <label for="proxyPort">proxyPort</label>
                         <input type="number" class="form-control" id="proxyPort" name="proxyPort"
                                placeholder="proxyPort"
-                               value="${spiderInfo.proxyPort}">
+                               th:value="${spiderInfo.proxyPort}">
                     </div>
                     <div class="form-group">
                         <label for="proxyUsername">proxyUsername</label>
                         <input type="text" class="form-control" id="proxyUsername" name="proxyUsername"
                                placeholder="proxyUsername"
-                               value="${spiderInfo.proxyUsername}">
+                               th:value="${spiderInfo.proxyUsername}">
                     </div>
                     <div class="form-group">
                         <label for="proxyPassword">proxyPassword</label>
                         <input type="text" class="form-control" id="proxyPassword" name="proxyPassword"
                                placeholder="proxyPassword"
-                               value="${spiderInfo.proxyPassword}">
+                               th:value="${spiderInfo.proxyPassword}">
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
@@ -652,7 +645,7 @@
     </div>
 </div>
 <div class="container">
-    <form id="import" action="${pageContext.request.contextPath}/panel/commons/editSpiderInfo" method="post">
+    <form id="import" action="/panel/commons/editSpiderInfo" method="post">
         <fieldset class="form-group">
             <label for="jsonSpiderInfo">Json爬虫模板</label>
             <textarea class="form-control" id="jsonSpiderInfo" rows="10"
@@ -713,7 +706,7 @@
             $('#confirmModal').modal('hide');
             localStorage.removeItem("spiderInfo");
         }, function () {
-            window.location.href = "${pageContext.request.contextPath}/panel/commons/editSpiderInfo?jsonSpiderInfo=" + spiderInfo;
+            window.location.href = "/panel/commons/editSpiderInfo?jsonSpiderInfo=" + spiderInfo;
             localStorage.removeItem("spiderInfo");
         });
     }

@@ -34,24 +34,12 @@
 		</repository>
 	</repositories>
 
-<!-- 	<pluginRepositories>
-		<pluginRepository>
-			<id>alfresco-public</id>
-			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>alfresco-public-snapshots</id>
-			<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>beardedgeeks-releases</id>
-			<url>http://beardedgeeks.googlecode.com/svn/repository/releases</url>
-		</pluginRepository>
-	</pluginRepositories> -->
+	<!-- <pluginRepositories> <pluginRepository> <id>alfresco-public</id> <url>https://artifacts.alfresco.com/nexus/content/groups/public</url> 
+		</pluginRepository> <pluginRepository> <id>alfresco-public-snapshots</id> 
+		<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url> 
+		<snapshots> <enabled>true</enabled> <updatePolicy>daily</updatePolicy> </snapshots> 
+		</pluginRepository> <pluginRepository> <id>beardedgeeks-releases</id> <url>http://beardedgeeks.googlecode.com/svn/repository/releases</url> 
+		</pluginRepository> </pluginRepositories> -->
 
 	<dependencies>
 
@@ -126,25 +114,17 @@
 			<version>3.1.0.M2</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<!--<scope>provided</scope> -->
+	 	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
-		</dependency>
+ 
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+
 		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
@@ -220,19 +200,14 @@
 		</dependency>
 	</dependencies>
 	<build>
+
+		<finalName>spider</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
 		</plugins>
-		<finalName>spider</finalName>
+
 	</build>
 </project>

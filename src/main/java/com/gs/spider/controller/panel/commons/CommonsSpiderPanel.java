@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation.Bucket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +40,7 @@ import com.gs.spider.utils.TablePage;
 @RequestMapping("panel/commons")
 public class CommonsSpiderPanel extends BaseController {
     private static final Gson gson = new Gson();
-    private Logger LOG = LogManager.getLogger(CommonsSpiderPanel.class);
+    
     @Autowired
     private CommonsSpiderService commonsSpiderService;
     @Autowired
@@ -102,7 +100,8 @@ public class CommonsSpiderPanel extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "tasks", method = RequestMethod.GET)
+    @SuppressWarnings("deprecation")
+	@RequestMapping(value = "tasks", method = RequestMethod.GET)
     public ModelAndView tasks(@RequestParam(required = false, defaultValue = "false") boolean showRunning) {
         ModelAndView modelAndView = new ModelAndView("panel/commons/listTasks");
         ResultListBundle<Task> listBundle;
@@ -128,6 +127,7 @@ public class CommonsSpiderPanel extends BaseController {
      * @param jsonSpiderInfo json格式的爬虫模板
      * @return
      */
+    @SuppressWarnings("deprecation")
     @RequestMapping(value = "editSpiderInfo", method = {RequestMethod.POST, RequestMethod.GET})
     public ModelAndView editSpiderInfo(String jsonSpiderInfo) {
         ModelAndView modelAndView = new ModelAndView("panel/commons/editSpiderInfo");
@@ -160,6 +160,7 @@ public class CommonsSpiderPanel extends BaseController {
      * @param spiderInfoId 爬虫模板id
      * @return
      */
+    @SuppressWarnings("deprecation")
     @RequestMapping(value = "editSpiderInfoById", method = {RequestMethod.POST, RequestMethod.GET})
     public ModelAndView editSpiderInfoById(String spiderInfoId) {
         ModelAndView modelAndView = new ModelAndView("panel/commons/editSpiderInfo");

@@ -1,41 +1,37 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: gaoshen
-  Date: 16/5/4
-  Time: 下午3:28
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>${appName }</title>
-    <%@include file="../../commons/header.jsp" %>
+    <title th:text="${appName}"></title>
+    <th:block th:include="commons/header" />
 </head>
 <body>
-	<%@include file="../../commons/head.jsp" %>
+	<th:block th:include="commons/head" />
 	<div class="container">
 	    <div class="jumbotron">
 	    	<div class="text-center">
-		        <h2 class="display-2 ">欢迎来到${appName }<span class="text-danger" style="font-size: 20;"> &nbsp;&nbsp;Version:${appVersion }</span></h2>
+		        <h2 class="display-2" th:text="|欢迎来到 ${appName}|">  </h2>
+		        <h3> <span class="text-danger" style="font-size: 20;" th:text="|&nbsp;&nbsp;Version:${appVersion}|"></span></h3>
 		        <p class="lead">请选择上方导航栏中的功能</p>
 	    	</div>
 	    	
 	        <!-- about more -->
 	        <div class="col-md-12">
-		        <a href="${onlineDocumentation }" class="btn btn-info pull-right" target="_blank">在线帮助</a>
+		        <a th:href="${onlineDocumentation}" class="btn btn-info pull-right" target="_blank">在线帮助</a>
 	        </div>
 	        <!-- end about more -->
 	    </div>
 	    
-	    <%-- <!-- version info -->
+	    <!-- version info -->
 	    <div class="col-md-12">
 	    	<!-- current version -->
 	    	<div class="row">
 	    		<div class="alert alert-info">
-	    			<h4>当前版本:<small>${appVersion }</small></h4>
+	    			<h4 th:text="|当前版本: ${appVersion } |"></h4>
 	    			<ul>
-	    				<li>优化..</li>
-	    				<li>修复..</li>
+	    				<li>增加docker 构建.</li>
+	    				<li>应用变更为spring boot结构 </li>
+	    				<li>elasticsearch 版本升级至 6.2.3,分词器变更为IK Analyzer。</li>
+	    				<li>视图模板变更为thymeleaf</li>
 	    			</ul>
 	    		</div>
 	    	</div>
@@ -67,11 +63,12 @@
 	    	</div>
 	    	<!-- end history version -->
 	    </div>
-	    <!-- end version info --> --%>
+	    <!-- end version info -->  
 	</div>
 	
-	<%@include file="../../commons/minScript.jsp" %>
-	<%-- <script type="text/javascript">
+	<th:block th:include="commons/minScript" />
+	
+	 <script type="text/javascript">
 		function setVisible(btn){
 			if($("#history-content").is(":hidden")){
 				$("#history-content").fadeIn(500);
@@ -81,6 +78,6 @@
 				$(btn).html("显示");
 			}
 		}
-	</script> --%>
+	</script> 
 </body>
 </html>
