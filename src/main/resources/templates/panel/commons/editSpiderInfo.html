@@ -432,62 +432,63 @@
                     <div class="form-group">
                         <label for="publishTimeFormat">publishTimeFormat</label>
                         <input type="text" class="form-control" id="publishTimeFormat" name="publishTimeFormat"
-                               placeholder="发布时间模板" value="${spiderInfo.publishTimeFormat}">
+                               placeholder="发布时间模板" th:value="${spiderInfo.publishTimeFormat}">
                     </div>
-                    <%--动态字段--%>
-                    <div class="form-group" id="dynamicFields">
+                  
+                    <div class="form-group" id="dynamicFields" th:inline="text">
                         <button type="button" onclick="addDynamicField()" class="btn btn-info">添加动态字段
                         </button>
-                        <c:forEach items="${spiderInfo.dynamicFields}" var="field" varStatus="index">
-                            <div id="dynamicField${index.count}" class="dynamicField" name="${field.name}">
+                        
+                        <th:block  th:each="field,index : ${spiderInfo.dynamicFields}">
+                        
+                            <div th:id="'dynamicField'+${index.count}" class="dynamicField" th:name="${field.name}">
                                 <button class="btn btn-danger" type="button"
-                                        onclick="$('#dynamicField${index.count}').remove();">
-                                    删除动态字段${field.name}</button>
-                                <div class="form-group">
-                                    <label for="${field.name}Reg"><span
-                                            class="label label-warning">动态</span>${field.name}正则</label>
-                                    <input type="text" class="form-control" id="${field.name}Reg"
-                                           name="${field.name}Reg"
-                                           placeholder="${field.name}正则" value="${field.regex}">
+                                        onclick="$(this.parentNode).remove();" th:text="|删除动态字段${field.name}|">
+                               </button>
+                                <div  class="form-group">
+                                    <label><span class="label label-warning">动态</span><span th:text="|${field.name}正则|"></span></label>
+                                    <input type="text" class="form-control" th:id="|${field.name}Reg|"
+                                           th:name="|${field.name}Reg|"
+                                           placeholder="当前字段正则" th:value="${field.regex}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="${field.name}XPath"><span
-                                            class="label label-warning">动态</span>${field.name}XPath</label>
-                                    <input type="text" class="form-control" id="${field.name}XPath"
-                                           name="${field.name}XPath"
-                                           placeholder="${field.name}XPath" value="${field.xpath}">
+                                    <label><span
+                                            class="label label-warning">动态</span><span th:text="|${field.name}XPath|"></span></label>
+                                    <input type="text" class="form-control" th:id="|${field.name}XPath|"
+                                           th:name="|${field.name}XPath|"
+                                           placeholder="XPath" th:value="${field.xpath}">
                                 </div>
                                 <div class="checkbox">
                                     <label>
-                                        <c:if test="${field.need}">
-                                            <input type="checkbox" name="need${field.name}" id="need${field.name}"
+                                        <th:block th:if="${field.need}">
+                                            <input type="checkbox" th:name="|need${field.name}|" th:id="|need${field.name}|"
                                                    checked="checked">
-                                        </c:if>
-                                        <c:if test="${!field.need}">
-                                            <input type="checkbox" name="need${field.name}" id="need${field.name}">
-                                        </c:if> 是否网页必须有${field.name}
+                                        </th:block>
+                                        <th:block th:if="${!field.need}">
+                                            <input type="checkbox" th:name="|need${field.name}|" th:id="|need${field.name}|">
+                                        </th:block> 是否网页必须有${field.name}
                                     </label>
                                 </div>
                             </div>
-                        </c:forEach>
+                        </th:block>
                     </div>
-                    <%--静态字段--%>
                     <div class="form-group" id="staticFields">
                         <button type="button" onclick="addStaticField()" class="btn btn-info">添加静态字段
                         </button>
-                        <c:forEach items="${spiderInfo.staticFields}" var="field" varStatus="index">
-                            <div id="staticField${index.count}" class="staticField" name="${field.name}">
+                        
+                        <th:block th:each="field,index : ${spiderInfo.staticFields}">
+                            <div th:id="'staticField'+${index.count}" class="staticField" th:name="${field.name}">
                                 <button class="btn btn-danger" type="button"
-                                        onclick="$('#staticField${index.count}').remove();">删除静态字段${field.name}</button>
+                                        onclick="$(this.parentNode).remove();"><span th:text="|删除静态字段${field.name}|"></span></button>
                                 <div class="form-group">
-                                    <label for="static-${field.name}-value"><span
-                                            class="label label-warning">静态</span>${field.name} Value</label>
+                                    <label><span
+                                            class="label label-warning">静态</span><span th:text="|${field.name} Value|"></span></label>
                                     <input type="text" class="form-control" id="static-${field.name}-value"
-                                           name="${field.name}-value"
-                                           placeholder="${field.name}value" value="${field.value}">
+                                           th:name="|${field.name}-value|"
+                                           placeholder="value" value="${field.value}">
                                 </div>
                             </div>
-                        </c:forEach>
+                        </th:block>
                     </div>
                     <div class="form-group">
                         <label for="lang">lang</label>
@@ -536,86 +537,86 @@
                     <div class="form-group">
                         <div class="checkbox">
                             <label>
-                                <c:if test="${spiderInfo.doNLP}">
+                                <th:block th:if="${spiderInfo.doNLP}">
                                     <input type="checkbox" name="doNLP" id="doNLP" checked="checked">
-                                </c:if>
-                                <c:if test="${!spiderInfo.doNLP}">
+                                </th:block>
+                                <th:block th:if="${!spiderInfo.doNLP}">
                                     <input type="checkbox" name="doNLP" id="doNLP">
-                                </c:if>是否进行nlp处理(包括摘要,关键词,命名实体抽取)
+                                </th:block>是否进行nlp处理(包括摘要,关键词,命名实体抽取)
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
                             <label>
-                                <c:if test="${spiderInfo.gatherFirstPage}">
+                                <th:block th:if="${spiderInfo.gatherFirstPage}">
                                     <input type="checkbox" name="gatherFirstPage" id="gatherFirstPage"
                                            checked="checked">
-                                </c:if>
-                                <c:if test="${!spiderInfo.gatherFirstPage}">
+                                </th:block>
+                                <th:block th:if="${!spiderInfo.gatherFirstPage}">
                                     <input type="checkbox" name="gatherFirstPage" id="gatherFirstPage">
-                                </c:if> 是否只抓取首页
+                                </th:block> 是否只抓取首页
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
                             <label>
-                                <c:if test="${spiderInfo.needTitle}">
+                                <th:block th:if="${spiderInfo.needTitle}">
                                     <input type="checkbox" name="needTitle" id="needTitle" checked="checked">
-                                </c:if>
-                                <c:if test="${!spiderInfo.needTitle}">
+                                </th:block>
+                                <th:block th:if="${!spiderInfo.needTitle}">
                                     <input type="checkbox" name="needTitle" id="needTitle">
-                                </c:if> 是否网页必须有标题
+                                </th:block> 是否网页必须有标题
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
                             <label>
-                                <c:if test="${spiderInfo.needContent}">
+                                <th:block th:if="${spiderInfo.needContent}">
                                     <input type="checkbox" name="needContent" id="needContent" checked="checked">
-                                </c:if>
-                                <c:if test="${!spiderInfo.needContent}">
+                                </th:block>
+                                <th:block th:if="${!spiderInfo.needContent}">
                                     <input type="checkbox" name="needContent" id="needContent">
-                                </c:if> 是否网页必须有正文
+                                </th:block> 是否网页必须有正文
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
                             <label>
-                                <c:if test="${spiderInfo.needPublishTime}">
+                                <th:block th:if="${spiderInfo.needPublishTime}">
                                     <input type="checkbox" name="needPublishTime" id="needPublishTime"
                                            checked="checked">
-                                </c:if>
-                                <c:if test="${!spiderInfo.needPublishTime}">
+                                </th:block>
+                                <th:block th:if="${!spiderInfo.needPublishTime}">
                                     <input type="checkbox" name="needPublishTime" id="needPublishTime">
-                                </c:if> 是否网页必须有发布时间
+                                </th:block> 是否网页必须有发布时间
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
                             <label>
-                                <c:if test="${spiderInfo.saveCapture}">
+                                <th:block th:if="${spiderInfo.saveCapture}">
                                     <input type="checkbox" name="saveCapture" id="saveCapture" checked="checked">
-                                </c:if>
-                                <c:if test="${!spiderInfo.saveCapture}">
+                                </th:block>
+                                <th:block th:if="${!spiderInfo.saveCapture}">
                                     <input type="checkbox" name="saveCapture" id="saveCapture">
-                                </c:if> 是否保存网页快照,默认保存
+                                </th:block> 是否保存网页快照,默认保存
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
                             <label>
-                                <c:if test="${spiderInfo.ajaxSite}">
+                                <th:block th:if="${spiderInfo.ajaxSite}">
                                     <input type="checkbox" name="ajaxSite" id="ajaxSite" checked="checked">
-                                </c:if>
-                                <c:if test="${!spiderInfo.ajaxSite}">
+                                </th:block>
+                                <th:block th:if="${!spiderInfo.ajaxSite}">
                                     <input type="checkbox" name="ajaxSite" id="ajaxSite">
-                                </c:if> 是否是ajax网页
+                                </th:block> 是否是ajax网页
                             </label>
                         </div>
                     </div>
@@ -623,13 +624,13 @@
                 <div class="form-group">
                     <div class="checkbox">
                         <label>
-                            <c:if test="${spiderInfo.autoDetectPublishDate}">
+                            <th:block th:if="${spiderInfo.autoDetectPublishDate}">
                                 <input type="checkbox" name="autoDetectPublishDate" id="autoDetectPublishDate"
                                        checked="checked">
-                            </c:if>
-                            <c:if test="${!spiderInfo.autoDetectPublishDate}">
+                            </th:block>
+                            <th:block th:if="${!spiderInfo.autoDetectPublishDate}">
                                 <input type="checkbox" name="autoDetectPublishDate" id="autoDetectPublishDate">
-                            </c:if> 是否自动探测发布日期,尽量手工配置,自动探测费时,默认关闭
+                            </th:block> 是否自动探测发布日期,尽量手工配置,自动探测费时,默认关闭
                         </label>
                     </div>
                 </div>
@@ -649,7 +650,7 @@
         <fieldset class="form-group">
             <label for="jsonSpiderInfo">Json爬虫模板</label>
             <textarea class="form-control" id="jsonSpiderInfo" rows="10"
-                      name="jsonSpiderInfo">${jsonSpiderInfo}</textarea>
+                      name="jsonSpiderInfo" th:value="${jsonSpiderInfo}"></textarea>
         </fieldset>
         <button type="submit" class="btn btn-warning">自动填充</button>
     </form>
