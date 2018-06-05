@@ -83,14 +83,14 @@
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="query">关键词:</label> <input class="form-control"
-							id="query" name="query" value="${param.query}">
+							id="query" name="query" th:value="${param.query}">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="domain">域名:</label><span style="color: red;">(*支持模糊)</span>
 						<input class="form-control" id="domain" name="domain"
-							value="${param.domain}">
+							th:value="${param.domain}">
 					</div>
 				</div>
 				<div class="col-md-2">
@@ -102,7 +102,7 @@
 		</div>
 		<div class="divide"></div>
 		<div class="container">
-			<div class="row">
+			<div >
 				<table class="table table-border table-hover">
 					<thead class="thead-inverse">
 						<tr>
@@ -116,37 +116,36 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:if test="${resultBundle ne null}">
-							<c:forEach items="${resultBundle}" var="webpage"
-								varStatus="wpIndex">
+						<th:block th:if="${resultBundle}">
+							<th:block th:each="webpage,wpIndex : ${resultBundle}">
 								<tr>
-									<th scope="row">${wpIndex.count}</th>
-									<td>${webpage.title}</td>
-									<td>${webpage.domain}</td>
-									<td><fmt:formatDate value="${webpage.gathertime}"
-											pattern="yyyy/MM/dd HH:mm:ss" /></td>
+									<th th:text="${wpIndex.count}"></th>
+									<td th:text="${webpage.title}"></td>
+									<td th:text="${webpage.domain}"></td>
+									<td th:text="${webpage.gathertime}"></td>
 									<td>
-										<button onclick="showDetail('${webpage.id}')"
+										<button th:onclick="|showDetail('${webpage.id}')|"
 											class="btn btn-info">Show</button>
 									</td>
 									<td><a
-										href="/panel/commons/showWebpageById?id=${webpage.id}"
+										th:href="|/panel/commons/showWebpageById?id=${webpage.id}|"
 										class="btn btn-primary" target="_blank">Go</a></td>
 									<td>
 										<button
-											onclick="rpcAndShowData('/commons/webpage/deleteById',{id:'${webpage.id}'})"
+											th:onclick="|rpcAndShowData('/commons/webpage/deleteById',{id:'${webpage.id}'})|"
 											class="btn btn-danger">删除</button>
 									</td>
 								</tr>
-							</c:forEach>
-						</c:if>
-						<c:if test="${resultBundle eq null}">
+							</th:block>
+						</th:block>
+						
+						<th:block th:unless="${resultBundle}">
 							<tr>
 								<th colspan="7"><div class="text-center">
 										<h3>无数据！</h3>
 									</div></th>
 							</tr>
-						</c:if>
+						</th:block>
 					</tbody>
 				</table>
 			</div>

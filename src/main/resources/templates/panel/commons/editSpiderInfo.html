@@ -340,7 +340,7 @@
                 </div>
                 <div class="form-group">
                     <label for="startURL">startURL(多个起始地址请使用json格式书写,例如['http://news.qq.com','http://news.qq.com/dfs/dfs.fg'])</label>
-                    <input type="text" class="form-control" id="startURL" name="startURL" placeholder="起始链接">
+                    <input type="text" class="form-control" id="startURL" name="startURL" placeholder="起始链接" th:value="${spiderInfo.startURL}">
                 </div>
                 <div id="advancedSetting" style="display: none;">
                     <div class="form-group">
@@ -687,19 +687,7 @@
 </div>
  
 </body>
-<script>
-    //JSON格式填充起始URL
-    var startUrls = [];
-    <c:forEach items="${spiderInfo.startURL}" var="url">
-    startUrls.push('${url}');
-    </c:forEach>
-    $('#startURL').val(JSON.stringify(startUrls));
-    //JSON格式填充回调地址
-    var callbackURL = [];
-    <c:forEach items="${spiderInfo.callbackURL}" var="url">
-    callbackURL.push('${url}');
-    </c:forEach>
-    $('#callbackURL').val(JSON.stringify(callbackURL));
+<script th:inline="javascript">
     // 检测上次编辑到一半的模板
     var spiderInfo = localStorage["spiderInfo"];
     if (spiderInfo != undefined) {

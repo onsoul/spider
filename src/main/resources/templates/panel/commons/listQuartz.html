@@ -1,24 +1,12 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: gaoshen
-  Date: 2017/1/18
-  Time: 20:14
-  To change this template use File | Settings | File Templates.
---%>
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>定时网页抓取任务列表</title>
-    <%@include file="../../commons/header.jsp" %>
+    <th:block th:include="commons/header" />
 </head>
 
 <body>
-<%@include file="../../commons/head.jsp" %>
+<th:block th:include="commons/head" />
 <div class="container">
     <div class="row">
         <table>
@@ -32,32 +20,34 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${list}" var="entry">
+            <th:block th:each="entry: ${list}">
                 <tr>
-                    <td>${entry.value.left.siteName}</td>
-                    <td><fmt:formatDate value="${entry.value.right.previousFireTime}"
+                    <td th:text="${entry.value.left.siteName}"></td>
+                     <td th:text="${entry.value.right.previousFireTime}"></td>
+                    <td th:text="${entry.value.right.nextFireTime}"> </td>
+                    <td th:text="${entry.value.right.startTime}"> </td>
+                   <!--  <td ><fmt:formatDate value="${entry.value.right.previousFireTime}"
                                         pattern="yyyy/MM/dd HH:mm:ss"/></td>
                     <td><fmt:formatDate value="${entry.value.right.nextFireTime}"
                                         pattern="yyyy/MM/dd HH:mm:ss"/></td>
                     <td><fmt:formatDate value="${entry.value.right.startTime}"
-                                        pattern="yyyy/MM/dd HH:mm:ss"/></td>
+                                        pattern="yyyy/MM/dd HH:mm:ss"/></td> -->
                     <td>
-                        <button onclick="deleteQuartzJob('${entry.key}')" class="am-btn am-btn-default">删除定时任务
+                        <button th:onclick="|deleteQuartzJob('${entry.key}')|" class="am-btn am-btn-default">删除定时任务
                         </button>
                     </td>
                 </tr>
-            </c:forEach>
+            </th:block>
             </tbody>
         </table>
     </div>
 </div>
-
-<%@include file="../../commons/minScript.jsp" %>
+<th:block th:include="commons/minScript" />
 <script>
     function deleteQuartzJob(spiderInfoId) {
         var cc = confirm("是否要删除定时任务");
         if (cc) {
-            $.get('${pageContext.request.contextPath}/commons/spider/removeQuartzJob', {spiderInfoId: spiderInfoId}, function () {
+            $.get('/commons/spider/removeQuartzJob', {spiderInfoId: spiderInfoId}, function () {
                 alert("删除定时任务成功");
             });
         }

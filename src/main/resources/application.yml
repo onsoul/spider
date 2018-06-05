@@ -5,8 +5,8 @@ logging.level.root: INFO
 ##下个版本修正为使用spring.data.*默认配置项
 gs.es.need: true
 ##不用ES是没什么意义的，所以我认为这个参数是多余的
-gs.es.host: ${ES_HOST:192.168.1.200}
-gs.es.port: ${ES_PORT:9301}
+gs.es.host: ${ES_HOST:localhost}
+gs.es.port: ${ES_PORT:9300}
 gs.es.cluster.name: ${CLUSTER_NAME:docker-cluster}
 gs.redis.need: true
 gs.redis.host: ${REDIS_HOST:localhost}
