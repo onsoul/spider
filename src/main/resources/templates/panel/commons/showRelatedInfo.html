@@ -43,10 +43,10 @@
 
                 <th:block th:each="${relatedLocation}" var="bucket">
                     <tr>
-                        <td>${bucket.key} </td>
-                        <td> ${bucket.docCount}</td>
+                        <td th:text="${bucket.key}"></td>
+                        <td th:text="${bucket.docCount}"> </td>
                     </tr>
-                </c:forEach>
+                </th:block>
 
                 </tbody>
             </table>
@@ -63,12 +63,12 @@
                 </thead>
                 <tbody>
 
-                <c:forEach items="${relatedInstitution}" var="bucket">
+                <th:block th:each="bucket:${relatedInstitution}" >
                     <tr>
-                        <td>${bucket.key} </td>
-                        <td> ${bucket.docCount}</td>
+                        <td th:text="${bucket.key}"></td>
+                        <td th:text="${bucket.docCount}"></td>
                     </tr>
-                </c:forEach>
+                </th:block>
 
                 </tbody>
             </table>
@@ -83,18 +83,19 @@
                 </thead>
                 <tbody>
 
-                <c:forEach items="${relatedKeywords}" var="bucket">
+                <th:block th:each="bucket : ${relatedKeywords}">
                     <tr>
-                        <td>${bucket.key} </td>
-                        <td> ${bucket.docCount}</td>
+                        <td th:text="${bucket.key} "></td>
+                        <td th:text="${bucket.docCount}"></td>
                     </tr>
-                </c:forEach>
+                </th:block>
 
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<%@include file="../../commons/minScript.jsp" %>
+
+<th:block th:include="commons/minScript" />
 </body>
 </html>
